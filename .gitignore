@@ -1,0 +1,41 @@
+# === Python artifacts ===
+__pycache__/
+*.py[cod]
+*.ipynb_checkpoints
+*.pkl
+*.log
+
+# === Environment folders ===
+.venv/
+venv/
+env/
+
+# === VSCode or Cursor project settings ===
+.vscode/
+.idea/
+*.code-workspace
+
+# === OS / system files ===
+.DS_Store
+Thumbs.db
+
+# === Data ===
+data/raw/
+data/shapefiles/
+data/processed/*.nc
+data/processed/*.h5
+*.zip
+
+# === Secrets / API keys ===
+*.env
+cdsapirc
+.env.*
+
+# === Tableau export artifacts ===
+*.twb
+*.twbx
+*.hyper
+tableau/
+
+# === Output or temp files ===
+outputs/

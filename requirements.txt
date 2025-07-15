@@ -1,0 +1,9 @@
+pandas
+numpy
+requests
+python-dotenv 
+cdsapi
+xarray
+geopandas
+netCDF4
+wbdata
