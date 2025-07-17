@@ -20,10 +20,9 @@ env/
 Thumbs.db
 
 # === Data ===
-data/raw/
+data/raw
 data/shapefiles/
-data/processed/*.nc
-data/processed/*.h5
+data/processed/
 *.zip
 
 # === Secrets / API keys ===

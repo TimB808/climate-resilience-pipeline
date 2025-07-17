@@ -2,10 +2,13 @@
 Fetch and save GDP and governance indicators from World Bank API.
 """
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import wbdata
 import pandas as pd
 import datetime
-import os
+from utils.io_utils import download_file
 
 OUT_DIR = "data/raw"
 OUT_PATH = os.path.join(OUT_DIR, "worldbank_indicators.csv")

@@ -2,8 +2,11 @@
 Fetch and save OWID CO2 and energy data from GitHub (CSV format).
 """
 
-import pandas as pd
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import pandas as pd
+from utils.io_utils import download_file
 
 OUT_DIR = "data/raw"
 OUT_PATH = os.path.join(OUT_DIR, "owid_co2_data.csv")
@@ -13,7 +16,8 @@ def fetch_owid_co2_data():
 
     url = "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv"
     print("Downloading OWID CO₂ dataset...")
-    df = pd.read_csv(url)
+    download_file(url, OUT_PATH)
+    df = pd.read_csv(OUT_PATH)
     df.to_csv(OUT_PATH, index=False)
     print(f"Saved to {OUT_PATH}")
     print(df.head())
