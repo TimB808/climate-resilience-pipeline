@@ -20,9 +20,12 @@ env/
 Thumbs.db
 
 # === Data ===
-data/raw
+data/raw/
 data/shapefiles/
+# Keep processed Parquet out of git by default (they are build artifacts)
 data/processed/
+# If you decide to version Parquet, comment the line above and selectively include:
+# !data/processed/annual_temp/**/part.parquet
 *.zip
 
 # === Secrets / API keys ===
