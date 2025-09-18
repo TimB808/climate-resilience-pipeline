@@ -98,6 +98,7 @@ make test
 ```
 make fetch_owid
 make fetch_climate
+make fetch_worldbank
 make run_all
 ```
 

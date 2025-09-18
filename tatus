@@ -1,0 +1,3 @@
+[33m5638b80[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m added utils files and batch processing in fetch_climate logic
+[33m20bd2e5[m fetch_climate.py working, fetch_owid.py and fetch_wb.py in draft version
+[33med35a18[m first commit

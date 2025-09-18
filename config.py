@@ -6,8 +6,8 @@ Edit this file to change paths, years, variable names, etc.
 import os
 
 # --- Climate Data Ingest Settings ---
-START_YEAR = 2000
-END_YEAR = 2023
+START_YEAR = 2000 # Also currently in use for the World Bank and OWID data
+END_YEAR = 2023 # Also currently in use for the World Bank and OWID data
 VARIABLE = "2m_temperature"
 TEMP_VAR = "t2m"  # Set to the exact variable name in your NetCDF files
 LAT_NAME = "latitude"
