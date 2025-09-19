@@ -51,3 +51,4 @@ pyarrow==17.0.0
 dask[array]==2024.8.2
 pytest==8.3.4
 wbgapi
+pycountry

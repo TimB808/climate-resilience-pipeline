@@ -17,6 +17,9 @@ fetch_worldbank:
 
 run_all: fetch_owid fetch_climate fetch_worldbank
 
+merge_all:
+	python data_transform/merge_all.py
+
 pipeline:
 	python pipeline.py
 

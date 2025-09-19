@@ -157,7 +157,6 @@ python publish_csv.py
 Use `--min-year/--max-year` to filter if needed.
 
 
-README section (paste into your repo)
 📦 Tableau-ready dataset
 
 File: outputs/annual_country_temperature.csv
@@ -166,7 +165,7 @@ Coverage: 2000–2023 (configurable in config.py)
 Source: ERA5 monthly means (2m temperature), aggregated to annual, country-level using regionmask with area weighting (cos(lat)).
 Small-country handling: micro-states are filled via a nearest-grid-cell fallback when no grid cell intersects the polygon; see data/processed/annual_temperature/fallback_audit.csv.
 
-How it was built
+## How it was built
 
 1. fetch_climate.py fetches ERA5 per-year NetCDFs and writes partitioned Parquet:
 
@@ -182,7 +181,7 @@ outputs/annual_country_temperature.csv
 
 3. The CSV is intended for Tableau Public / Desktop.
 
-Notes & caveats
+##Notes & caveats
 
 Temperatures are °C (Kelvin → °C).
 
@@ -192,3 +191,10 @@ Antarctica / territories: coverage depends on the country polygons in the shapef
 
 A small set of countries may use the nearest-cell fallback; see the audit for transparency.
 
+### Country coverage:
+
+Standard ISO3 codes used where available.
+
+Custom codes assigned for non-ISO territories (e.g. NCY for Northern Cyprus, SML for Somaliland, XKX for Kosovo).
+
+Non-sovereign bases, reefs, and uninhabited regions (e.g. Guantánamo Bay, Bir Tawil, Spratly Islands) excluded from the merged dataset.
