@@ -144,7 +144,7 @@ def main():
     # Convert to DataFrame
     print("\nConverting to DataFrame...")
     try:
-        df = regional_ts.to_dataframe(name="avg_temp_c").reset_index()
+        df = regional_ts.to_dataframe(name="temp_c").reset_index()
         
         # Find time column
         time_col = TIME_NAME if TIME_NAME in df.columns else None
@@ -155,7 +155,7 @@ def main():
         df["year"] = pd.to_datetime(df[time_col]).dt.year
         name_map = {i: n for i, n in enumerate(regions.names)}
         df["country"] = df["region"].map(name_map)
-        df_main = df.groupby(["country", "year"], as_index=False)["avg_temp_c"].mean()
+        df_main = df.groupby(["country", "year"], as_index=False)["temp_c"].mean()
         
         print(f"Main results: {len(df_main)} rows")
         
@@ -219,10 +219,10 @@ def main():
         print(f"WARNING: some years outside requested range: {df_years - set(years)}")
 
     # Check temperature range
-    out_of_range = df_all[(df_all["avg_temp_c"] < -60) | (df_all["avg_temp_c"] > 60)]
+    out_of_range = df_all[(df_all["temp_c"] < -60) | (df_all["temp_c"] > 60)]
     if len(out_of_range) > 0:
         print(f"WARNING: {len(out_of_range)} rows outside plausible temp range (-60..60 C)")
-        print(f"Range: {df_all['avg_temp_c'].min():.1f} to {df_all['avg_temp_c'].max():.1f} C")
+        print(f"Range: {df_all['temp_c'].min():.1f} to {df_all['temp_c'].max():.1f} C")
 
     # Final report
     print("\n" + "="*50)
@@ -247,14 +247,14 @@ def main():
         print(f"\nSample rows for year {latest} ({len(latest_data)} countries):")
         sample_size = min(5, len(latest_data))
         sample_data = latest_data.sample(sample_size) if len(latest_data) > sample_size else latest_data
-        print(sample_data[["country", "year", "avg_temp_c"]].to_string(index=False))
+        print(sample_data[["country", "year", "temp_c"]].to_string(index=False))
         
         # Temperature statistics
         print(f"\nTemperature statistics for {latest}:")
-        print(f"  Mean: {latest_data['avg_temp_c'].mean():.1f} C")
-        print(f"  Min: {latest_data['avg_temp_c'].min():.1f} C")
-        print(f"  Max: {latest_data['avg_temp_c'].max():.1f} C")
-        print(f"  Std: {latest_data['avg_temp_c'].std():.1f} C")
+        print(f"  Mean: {latest_data['temp_c'].mean():.1f} C")
+        print(f"  Min: {latest_data['temp_c'].min():.1f} C")
+        print(f"  Max: {latest_data['temp_c'].max():.1f} C")
+        print(f"  Std: {latest_data['temp_c'].std():.1f} C")
 
     # Exit code determination
     if len(remaining) > 0:

@@ -140,7 +140,7 @@ Fallback used for: 0
 Missing after fallback: 0
 
 Sample rows for year 2025 (10 countries):
-  country  year  avg_temp_c
+  country  year  temp_c
   Bolivia  2025   19.928442
     Chile  2025    9.180294
 Indonesia  2025   26.010683

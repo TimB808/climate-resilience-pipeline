@@ -69,16 +69,32 @@ def run_data_ingestion():
         raise
 
 def run_data_transformation():
-    """Run data transformation steps (placeholder for future implementation)."""
-    logger.info("Data transformation step - not yet implemented")
-    # TODO: Implement data cleaning, merging, and transformation logic
-    pass
+    """Run data transformation steps."""
+    logger.info("Starting data transformation...")
+    
+    try:
+        from data_transform.merge_all import main as merge_all
+        merge_all()
+        logger.info("Data transformation completed successfully!")
+    except Exception as e:
+        logger.error(f"Data transformation failed: {e}")
+        raise
 
 def generate_outputs():
     """Generate final outputs for analysis and visualization."""
     logger.info("Generating outputs...")
-    # TODO: Implement output generation logic
-    pass
+    
+    try:
+        from publish_csv import publish
+        n_parts, n_countries, n_rows, y_min, y_max = publish(
+            min_year=None,
+            max_year=None,
+            write_success_marker=True
+        )
+        logger.info(f"Published CSV | Years: {y_min}..{y_max} | Countries: {n_countries} | Rows: {n_rows}")
+    except Exception as e:
+        logger.error(f"Output generation failed: {e}")
+        raise
 
 def main():
     """Main pipeline execution."""
@@ -104,5 +120,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

@@ -13,7 +13,7 @@ from config import (
 )
 
 
-REQUIRED_COLUMNS = {"country", "year", "avg_temp_c"}
+REQUIRED_COLUMNS = {"country", "year", "temp_c"}
 
 
 def ensure_dir(path):
@@ -70,15 +70,15 @@ def load_partitions(paths: list, min_year: int | None, max_year: int | None) -> 
         if max_year is not None and year > max_year:
             continue
         validate_parquet_schema(p)
-        df = pd.read_parquet(p, engine=PARQUET_ENGINE, columns=["country", "year", "avg_temp_c"])  # type: ignore[arg-type]
+        df = pd.read_parquet(p, engine=PARQUET_ENGINE, columns=["country", "year", "temp_c"])  # type: ignore[arg-type]
         # enforce dtypes
         df["country"] = df["country"].astype(str)
         df["year"] = df["year"].astype(int)
-        df["avg_temp_c"] = df["avg_temp_c"].astype(float)
+        df["temp_c"] = df["temp_c"].astype(float)
         frames.append(df)
 
     if not frames:
-        return pd.DataFrame(columns=["country", "year", "avg_temp_c"])  # empty
+        return pd.DataFrame(columns=["country", "year", "temp_c"])  # empty
 
     df_all = pd.concat(frames, ignore_index=True)
     return df_all
@@ -140,5 +140,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

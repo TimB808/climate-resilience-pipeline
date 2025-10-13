@@ -203,7 +203,7 @@ def compute_country_annual_means_from_years(years):
             else:
                 region_time_batch = masked_batch.mean(dim=["lat", "lon"]) 
 
-            df_weighted_batch = region_time_batch.to_dataframe(name="avg_temp_c").reset_index()
+            df_weighted_batch = region_time_batch.to_dataframe(name="temp_c").reset_index()
 
             idx_to_name = {j: name for j, name in enumerate(batch_regions.names)}
             if "region" in df_weighted_batch.columns:
@@ -216,10 +216,10 @@ def compute_country_annual_means_from_years(years):
             # Limit to this year only (defensive)
             df_weighted_batch = df_weighted_batch[df_weighted_batch["year"] == year]
 
-            grouped = df_weighted_batch.groupby(["country", "year"], as_index=False)["avg_temp_c"].mean()
+            grouped = df_weighted_batch.groupby(["country", "year"], as_index=False)["temp_c"].mean()
             year_results.append(grouped)
 
-        df_year = pd.concat(year_results, ignore_index=True) if year_results else pd.DataFrame(columns=["country","year","avg_temp_c"]) 
+        df_year = pd.concat(year_results, ignore_index=True) if year_results else pd.DataFrame(columns=["country","year","temp_c"]) 
 
         # Identify missing countries for this year
         all_countries = set(regions.names)
@@ -240,7 +240,7 @@ def compute_country_annual_means_from_years(years):
                 use_representative_point=USE_REPRESENTATIVE_POINT,
             )
         else:
-            fb_df = pd.DataFrame(columns=["country","year","avg_temp_c"]) 
+            fb_df = pd.DataFrame(columns=["country","year","temp_c"]) 
             audit_df = pd.DataFrame(columns=["country","status"]) 
 
         # Merge for this year and write Parquet partition
@@ -251,7 +251,7 @@ def compute_country_annual_means_from_years(years):
         if not final_year.empty:
             final_year["country"] = final_year["country"].astype(str)
             final_year["year"] = final_year["year"].astype(int)
-            final_year["avg_temp_c"] = final_year["avg_temp_c"].astype(float)
+            final_year["temp_c"] = final_year["temp_c"].astype(float)
 
             final_path = PROC_ANNUAL_TEMP_PART_TEMPLATE.format(year=year)
             ensure_dir(final_path)
@@ -282,7 +282,7 @@ def compute_country_annual_means_from_years(years):
         audit_all.to_csv(FALLBACK_AUDIT_CSV, index=False)
 
     # Build preview CSV across processed years
-    final = pd.concat(preview_frames, ignore_index=True) if preview_frames else pd.DataFrame(columns=["country","year","avg_temp_c"]) 
+    final = pd.concat(preview_frames, ignore_index=True) if preview_frames else pd.DataFrame(columns=["country","year","temp_c"]) 
     years_suffix = ""
     if years:
         y_min, y_max = min(years), max(years)

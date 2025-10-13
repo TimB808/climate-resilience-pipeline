@@ -19,12 +19,7 @@ def geojson_to_shapefile(geojson_path, shapefile_dir, shapefile_name="countries.
     shapefile_path = os.path.join(shapefile_dir, shapefile_name)
     gdf.to_file(shapefile_path)
     print(f"Saved shapefile to {shapefile_path}")
-    return shapefile_path 
-
-## Drop-in fallback helper 
-import numpy as np
-import pandas as pd
-from shapely.geometry import Point
+    return shapefile_path
 
 # simple, vectorised haversine (km)
 def _haversine_km(lat1, lon1, lats, lons):
@@ -59,7 +54,7 @@ def nearest_cell_fallback(
     """
     For each country in `missing_countries`, pick the nearest ERA5 grid cell to the
     country geometry (centroid or representative_point). Return a DataFrame with
-    (country, year, avg_temp_c) and an audit log DataFrame.
+    (country, year, temp_c) and an audit log DataFrame.
     """
     lats, lons, LAT, LON = _build_grid(ds, lat_name=lat_name, lon_name=lon_name)
     flat_LAT = LAT.ravel()
@@ -96,7 +91,7 @@ def nearest_cell_fallback(
 
         # extract time series at nearest cell and aggregate to annual means
         series = ds[temp_var].sel({lat_name: near_lat, lon_name: near_lon}, method="nearest")
-        dfp = series.to_dataframe(name="avg_temp_c").reset_index()
+        dfp = series.to_dataframe(name="temp_c").reset_index()
 
         # find the time column name
         time_col = next((c for c in dfp.columns if c.lower() in ("time","valid_time","date","datetime")), None)
@@ -106,7 +101,7 @@ def nearest_cell_fallback(
             time_col = time_candidates[0] if time_candidates else dfp.columns[0]
 
         dfp["year"] = pd.to_datetime(dfp[time_col]).dt.year
-        dfp = dfp.groupby("year", as_index=False)["avg_temp_c"].mean()
+        dfp = dfp.groupby("year", as_index=False)["temp_c"].mean()
         dfp["country"] = name
 
         rows.append(dfp)
@@ -118,9 +113,9 @@ def nearest_cell_fallback(
             "min_km": dmin
         })
 
-    fb = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=["year","avg_temp_c","country"])
+    fb = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=["year","temp_c","country"])
     audit_df = pd.DataFrame(audit)
-    return fb[["country","year","avg_temp_c"]], audit_df
+    return fb[["country","year","temp_c"]], audit_df
 
 def sanitize_countries(
     gdf: gpd.GeoDataFrame,

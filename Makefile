@@ -3,31 +3,49 @@
 setup:
 	python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
 
-fetch_owid:
-	python data_ingest/fetch_owid.py
-
-fetch_climate:
+# === Data Ingestion Targets ===
+fetch_era5:
+	@echo "==> Fetching ERA5 climate data..."
 	python data_ingest/fetch_climate.py
 
-fetch_years:
-	python data_ingest/fetch_climate.py --years $(YEARS)
+fetch_owid:
+	@echo "==> Fetching Our World in Data..."
+	python data_ingest/fetch_owid.py
 
-fetch_worldbank:
+fetch_wb:
+	@echo "==> Fetching World Bank data..."
 	python data_ingest/fetch_wb.py
 
-run_all: fetch_owid fetch_climate fetch_worldbank
-
+# === Data Transformation Targets ===
 merge_all:
+	@echo "==> Merging all datasets..."
 	python data_transform/merge_all.py
+
+# === Publishing Targets ===
+publish_csv:
+	@echo "==> Publishing CSV outputs..."
+	python publish_csv.py
+
+# === Pipeline Targets ===
+all: fetch_era5 fetch_owid fetch_wb merge_all publish_csv
+	@echo "==> Full pipeline complete!"
 
 pipeline:
 	python pipeline.py
 
+# === Legacy Aliases ===
+fetch_climate: fetch_era5
+
+fetch_worldbank: fetch_wb
+
+run_all: all
+
+fetch_years:
+	python data_ingest/fetch_climate.py --years $(YEARS)
+
+# === Cleanup Targets ===
 clean_data:
 	rm -rf data/raw/*.csv data/processed/*.csv data/processed/*.nc
-
-publish_csv:
-	python publish_csv.py
 
 clean_processed:
 	rm -rf data/processed/annual_temp
@@ -44,4 +62,4 @@ dev_check_masking:
 test:
 	pytest -q
 
-.PHONY: setup fetch_owid fetch_climate fetch_worldbank fetch_years publish_csv run_all clean_data clean_processed clean_outputs dev_check_geoms dev_check_masking test
+.PHONY: setup fetch_era5 fetch_owid fetch_wb merge_all publish_csv all pipeline fetch_climate fetch_worldbank run_all fetch_years clean_data clean_processed clean_outputs dev_check_geoms dev_check_masking test

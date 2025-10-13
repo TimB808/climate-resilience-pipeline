@@ -66,9 +66,7 @@ NAME_TO_ISO3 = {
     "United States Virgin Islands": "VIR",
     "Vatican": "VAT",
     "The Bahamas": "BHS",
-    # No ISO3 → drop later:
     "Dhekelia Sovereign Base Area": None,
-    
 }
 
 def _norm(s: str) -> str:
@@ -101,8 +99,6 @@ def main():
     wb   = read_parquet_dir(WB_DIR)
 
     # --- ERA5 normalisation ---
-    if "avg_temp_c" in era5.columns:
-        era5 = era5.rename(columns={"avg_temp_c": "temp_c"})
     if "iso3" not in era5.columns:
         era5.loc[:, "iso3"] = era5["country"].apply(country_to_iso3)
 
